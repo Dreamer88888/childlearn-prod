@@ -1,0 +1,65 @@
+.btn-green {
+  border-radius: 7px;
+  border: solid 0px #2eb89f;
+  cursor: pointer;
+  overflow: hidden;
+  background: #2eb89f;
+  align-items: center;
+  padding: 7px 25px;
+  margin: 0.8rem;
+  min-width: 10rem;
+  transition-duration: 0.7s;
+  text-decoration: none;
+}
+
+.btn-green:hover {
+  background: #076f5c;
+  text-decoration: none;
+}
+
+.btn-green-text {
+  font-size: 14pt;
+  font-weight: bold;
+  font-family: "Amatic SC", cursive;
+  color: #ffffff;
+}
+
+.btn-green-icon {
+  width: 14pt;
+  height: 14pt;
+  margin-left: 1rem;
+}
+
+.btn-add {
+  margin-top: 2rem;
+  justify-content: center;
+  padding: 0.6em 1.5em;
+  background-color: #2eb89f;
+  color: white;
+  width: fit-content;
+  font-family: "Roboto";
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 14pt;
+  border-radius: 20px;
+}
+
+.btn-add-white {
+  margin-top: 2rem;
+  justify-content: center;
+  padding: 0.6em 1.5em;
+  background-color: #ffffff;
+  color: #2eb89f;
+  width: fit-content;
+  font-family: "Roboto";
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 14pt;
+  border-radius: 20px;
+}
+
+.btn:hover {
+  background-color: #076f5c;
+  color: #fffffff6;
+  opacity: 90%;
+}

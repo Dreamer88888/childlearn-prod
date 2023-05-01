@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Menyunting Laporan Murid</title>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/file-upload.css}" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+    <link rel="stylesheet" th:href="@{/css/grid-display.css}" />
+    <style>
+      .btn-add:disabled {
+        color: #fff;
+        background-color: rgb(197, 193, 193);
+        border: #333 1px solid;
+      }
+      .frozen-pane {
+        background-color: green;
+      }
+      .frozen-pane {
+        color: #fff !important;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <form
+      id="submission-form"
+      onsubmit="triggerModal(event, 'u')"
+      th:object="${reportHeaderUpdateDto}"
+      class="form-horizontal"
+      role="form"
+      method="post"
+      enctype="multipart/form-data"
+      th:action="@{/report/header/update}"
+    >
+      <div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center">
+            <h2 class="heading-section">MENYUNTING LAPORAN MURID</h2>
+          </div>
+          <br />
+        </div>
+        <div class="row justify-content-center">
+          <div class="mb3 padding-form">
+            <label for="studentName" class="input-label">NAMA MURID</label>
+            <input
+              type="text"
+              class="form-control"
+              id="studentName"
+              th:field="*{studentName}"
+              placeholder="Nama"
+              readonly
+            />
+          </div>
+          <div class="mb3 padding-form">
+            <label for="summaryReport" class="input-label">CATATAN</label>
+            <textarea
+              type="text-area"
+              class="form-control form-textarea"
+              id="summaryReport"
+              th:field="*{summary}"
+            ></textarea>
+            <div
+              class="alert alert-danger"
+              th:if="${#fields.hasErrors('summary')}"
+              th:errors="*{summary}"
+            ></div>
+          </div>
+        </div>
+
+        <div class="padding-form">
+          <!-- Lengkapin thref di sini untuk edit detail -->
+          <div class="center-flex">
+            <div class="nx2-grid-container">
+              <a
+                class="nx2-grid-item"
+                th:each="subject : ${subjects}"
+                th:text="${subject.name}"
+                th:href="@{'/report/detail/update/' + ${studentId} + '/' + ${reportHeaderId} + '/' + ${subject.id}}"
+              ></a>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" th:field="*{studentId}" />
+        <input type="hidden" th:field="*{reportHeaderId}" />
+        <div class="flex-justify-center">
+          <button
+            type="submit"
+            class="btn btn-add extra-margin-t extra-margin-b"
+          >
+            SUNTING
+          </button>
+        </div>
+      </div>
+    </form>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

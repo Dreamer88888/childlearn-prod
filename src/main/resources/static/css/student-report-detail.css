@@ -1,0 +1,97 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.css");
+@import url("//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css");
+@import url("//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css");
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.grid-c-30-70 {
+  display: grid;
+  grid-template-columns: 48% 52%;
+  margin: 5% 10%;
+  margin-top: 0;
+}
+
+.description {
+  font-size: 12pt;
+  text-align: justify;
+  overflow: hidden;
+}
+
+hr {
+  width: 84%;
+}
+
+.form-header {
+  font-size: 30px;
+  font-family: "Mouse Memoirs";
+  letter-spacing: 2px;
+  color: #2eb89f;
+}
+
+.center-flex {
+  display: flex;
+  justify-content: center;
+}
+
+.font-non-description {
+  font-family: "Amatic SC";
+  font-size: 24pt;
+  color: #2eb89f;
+  font-weight: bold;
+}
+
+.card-container {
+  background-color: #fbfbfb;
+  box-shadow: 10px 10px 5px lightblue;
+}
+
+.medium-card {
+  border-radius: 20px;
+  width: 50%;
+  padding: 1.5% 3%;
+}
+
+.large-card {
+  border-radius: 20px;
+  width: 90%;
+  padding: 1.5% 3%;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-material-report {
+  text-align: center;
+  font-size: 30pt;
+}
+
+.detail-per-material-report {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  padding: 2% 5%;
+  justify-content: center;
+  align-items: center;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
+
+.det-i {
+  width: 100%;
+  margin-right: 5%;
+}
+
+.det-d {
+  margin-left: 5%;
+}

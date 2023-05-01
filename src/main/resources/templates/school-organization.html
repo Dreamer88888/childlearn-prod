@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Struktur Sekolah</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/grid-display.css}" />
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="row justify-content-center extra-margin-b">
+      <div class="col-md-6 text-center">
+        <h2 class="heading-section">STRUKTUR SEKOLAH</h2>
+      </div>
+    </div>
+    <div class="data-not-found" th:if="${#lists.isEmpty(hms) and #lists.isEmpty(teachers)}">
+      <h3>DATA TIDAK DITEMUKAN</h3>
+      <br>
+      <img id="not-found-image" th:src="@{/images/empty-box.png}" alt="Empty Box Image">
+    </div>
+    <div class="dynamic-grid-container padding-form jc-space-evenly" th:unless="${#lists.isEmpty(hms)}">
+      <div class="person-grid-item" th:each="hm : ${hms}">
+        <img
+          class="round-person-img undraggable"
+          th:src="@{'data:image/jpeg;base64,' + ${hm.base64}}"
+          alt=""
+        />
+        <div th:text="${hm.fullName}"></div>
+        <div th:text="${hm.positionName}"></div>
+        <div
+          class="font-color-black"
+          th:text="@{'KONTAK: '+${hm.phoneNumber}}"
+        ></div>
+      </div>
+    </div>
+    <div class="nx4-grid-container padding-form jc-space-evenly" th:unless="${#lists.isEmpty(teachers)}">
+      <div class="person-grid-item" th:each="teacher : ${teachers}">
+        <img
+          class="round-person-img undraggable"
+          th:src="@{'data:image/jpeg;base64,' + ${teacher.base64}}"
+          alt=""
+        />
+        <div th:text="${teacher.fullName}"></div>
+        <div th:text="${teacher.positionName}"></div>
+        <div
+          class="font-color-black"
+          th:text="@{'KONTAK: '+${teacher.phoneNumber}}"
+        ></div>
+      </div>
+    </div>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/global-action.js}"></script>
+  </body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChildLearn - Mengelola Tugas & Kuis</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/star-rating.css}" />
+    <link rel="stylesheet" th:href="@{/css/manage-assignment.css}" />
+
+    <style>
+      .grid-full {
+        display: grid;
+        width: 100%;
+        /* border: 1px solid purple; */
+        grid-template-columns: 40% 5% auto;
+      }
+
+      #card-column {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        margin-top: 40px;
+      }
+
+      :root {
+        --star-color: #5c5a5a;
+        --star-background: #fc0;
+      }
+      .Stars {
+        --percent: calc(var(--rating) / 5 * 100%);
+        display: inline-block;
+        font-family: Times;
+        font-size: 26pt;
+      }
+      .Stars::before {
+        content: "★★★★★";
+        letter-spacing: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--star-background) var(--percent),
+          var(--star-color) var(--percent)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .disabled {
+        color: #fff;
+        background-color: rgb(197, 193, 193);
+        border: #eee 0.5px solid;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="asg-content-container">
+      <div class="center">
+        <h2 class="heading-section">Tugas & Kuis</h2>
+      </div>
+      <br />
+      <div class="asg-detail">
+        <div>
+          <span class="grid-half-page">
+            <p>MATA PELAJARAN</p>
+            <p>:</p>
+            <p th:text="${subjectName}"></p>
+          </span>
+        </div>
+        <div>
+          <span class="grid-half-page">
+            <p>KELAS</p>
+            <p>:</p>
+            <p th:text="${className}"></p>
+          </span>
+        </div>
+      </div>
+      <div class="data-not-found" th:if="${#lists.isEmpty(assignments)}">
+        <h3>DATA TIDAK DITEMUKAN</h3>
+      <br>
+      <img id="not-found-image" th:src="@{/images/empty-box.png}" alt="Empty Box Image">
+      </div>
+      
+      <div class="card" th:unless="${#lists.isEmpty(assignments)}">
+        <div class="grid-4 card-item"  id="card-column">
+          <div class="grid-item"></div>
+          <div class="grid-item txt-column bold">PERTANYAAN</div>
+          <div class="grid-item txt-column bold">JAWABAN</div>
+          <div class="grid-item txt-column bold">NILAI</div>
+        </div>
+        <!-- Kasih For di sini -->
+        <div
+          class="grid-4 card-item asg-card"
+          th:each="assignment : ${assignments}"
+        >
+          <div class="grid-item txt-asg-card">
+            <div id="asg-name" class="grid-full">
+              <p>TUGAS</p>
+              <p>:</p>
+              <p th:text="${assignment.title}"></p>
+            </div>
+            <div id="asg-due" class="grid-full">
+              <p>TENGGAT WAKTU</p>
+              <p>:</p>
+              <p th:text="${assignment.deadline}"></p>
+            </div>
+            <div id="asg-status" class="grid-full">
+              <p>STATUS</p>
+              <p>:</p>
+              <p th:text="${assignment.status}"></p>
+            </div>
+          </div>
+          <div class="grid-item center">
+            <a
+              class="btn-green center"
+              th:href="@{'/assignment/get/' + ${assignment.id}}"
+            >
+              <span class="btn-green-text">Unduh</span>
+              <img
+                th:src="@{/images/download.png}"
+                class="btn-green-icon"
+                alt=""
+              />
+            </a>
+          </div>
+          <div class="grid-item center flex-v-container">
+            <a
+              class="btn-green center"
+              th:if="${(assignment.status == 'Belum Dikerjakan' or assignment.status == 'Belum Dinilai') and #dates.createNow().compareTo(assignment.deadline) eq -1}"
+              th:href="@{'/answer-sheet/add?assignmentId=' + ${assignment.id}}"
+            >
+              <span class="btn-green-text">Unggah</span>
+              <img
+                th:src="@{/images/upload.png}"
+                class="btn-green-icon"
+                alt=""
+              />
+            </a>
+            <a
+              class="btn-green center disabled"
+              th:if="${assignment.status eq 'Belum Dikerjakan' and #dates.createNow().compareTo(assignment.deadline) == 1}"
+              th:href="@{'/answer-sheet/add?assignmentId=' + ${assignment.id}}"
+            >
+              <span class="btn-green-text">Unggah</span>
+              <img
+                th:src="@{/images/upload.png}"
+                class="btn-green-icon"
+                alt=""
+              />
+            </a>
+            <a
+              class="btn-green center"
+              th:unless="${assignment.status} eq 'Belum Dikerjakan'"
+              th:href="@{'/answer-sheet/get/' + ${assignment.id}} + '/' + ${studentId}"
+            >
+              <span class="btn-green-text">Unduh</span>
+              <img
+                th:src="@{/images/download.png}"
+                class="btn-green-icon"
+                alt=""
+              />
+            </a>
+          </div>
+          <div
+            class="grid-item center flex-v-container"
+            th:switch="${assignment.status}"
+          >
+            <div id="asg-hvnt-been-graded" th:case="'Belum Dinilai'">
+              BELUM DINILAI
+            </div>
+            <div id="asg-hvnt-been-finished" th:case="'Belum Dikerjakan'">
+              BELUM DINILAI
+            </div>
+            <div
+              class="Stars"
+              th:case="'Selesai'"
+              th:style="'--rating: ' + ${assignment.score}"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

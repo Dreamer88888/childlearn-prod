@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Mengelola Akun Murid</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="form-group text-center">
+      <h1 class="heading-section">MURID</h1>
+    </div>
+
+    <a
+      class="btn btn-outline-success btn-lg btn-tambah"
+      th:href="@{'/student/add'}"
+      >Tambah Murid
+    </a>
+
+    <div class="data-not-found" th:if="${#lists.isEmpty(students)}">
+      <h3>DATA TIDAK DITEMUKAN</h3>
+      <br>
+      <img id="not-found-image" th:src="@{/images/empty-box.png}" alt="Empty Box Image">
+    </div>
+
+    <div class="container" th:unless="${#lists.isEmpty(students)}">
+      <table class="table adjust-table">
+        <thead>
+          <tr>
+            <th class="header-table-id">No</th>
+            <th class="header-table-name">Nama Siswa</th>
+            <th class="header-table-other">Kelas</th>
+            <th class="header-table-action">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="student : ${students}">
+            <td class="table-id" th:text="${studentStat.index}+1"></td>
+            <td class="table-name" th:text="${student.user.fullName}"></td>
+            <td class="table-other" th:text="${student.cl.name}"></td>
+            <td class="table-action">
+              <a
+                href=""
+                class="btn btn-success"
+                th:href="@{'/student/update/' + ${student.id}}"
+                >Sunting</a
+              >
+              <a
+                href=""
+                class="btn btn-danger"
+                data-toggle="modal"
+                data-target="#action-modal-container"
+                onclick="modalDelete(event)"
+                th:data-href="@{'/student/delete/' + ${student.id}}"
+                >Hapus</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+    <script>
+      $(document).ready(function () {
+        l = $("thead")[0].getBoundingClientRect().left;
+        $(".btn-tambah").css("left", `${l}px`);
+      });
+    </script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

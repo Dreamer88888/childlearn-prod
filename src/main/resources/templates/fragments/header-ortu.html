@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Header</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <div class="left">
+          <ul class="navbar-left">
+            <a class="navbar-brand" th:href="@{/}"
+              ><img
+                class="undraggable"
+                th:src="@{/images/logo-childlearn.png}"
+                alt=""
+            /></a>
+            <li><a th:href="@{/assignment}">Tugas dan Kuis</a></li>
+            <li><a th:href="@{/material}">Materi Pembelajaran</a></li>
+            <li>
+              <a th:href="@{'/agenda/' + ${userDetail.userId}}">Agenda</a>
+            </li>
+            <li>
+              <a th:href="@{'/report/detail/' + ${userDetail.userId}}"
+                >Laporan Murid</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="right">
+          <ul class="navbar-right">
+            <li class="dropdown">
+              <img th:src="@{/images/info.png}" alt="" />
+              <ul class="dropdown-menu">
+                <li>
+                  <a th:href="@{/school-organization}">Struktur Sekolah</a>
+                </li>
+                <li><a th:href="@{/class-participation}">Teman Kelas</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <img
+                class="img img-circle"
+                style="background: #e1dede"
+                width="25"
+                height="25"
+                th:src="@{(userDetail.base64 != null) ? 'data:image/jpeg;base64,' + ${userDetail.base64} : 'dummy/blank-profile-picture.png'}"
+              />
+              <ul class="dropdown-menu center">
+                <br />
+                <img
+                  class="img img-circle"
+                  style="background: #e1dede"
+                  width="75"
+                  height="75"
+                  th:src="@{(userDetail.base64 != null) ? 'data:image/jpeg;base64,' + ${userDetail.base64} : 'dummy/blank-profile-picture.png'}"
+                />
+                <br />
+                <h3 id="user-full-name" th:text="${userDetail.fullName}"></h3>
+                <li><a th:href="@{/manage-password}">Ubah Kata Sandi</a></li>
+                <li>
+                  <a
+                    data-toggle="modal"
+                    data-backdrop="static"
+                    data-keyboard="false"
+                    href="#action-modal-container"
+                    th:data-href="@{/logout}"
+                    onclick="modalOk(event, 'Sampai Jumpa Kembali!', true)"
+                    >Keluar</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Mata Pelajaran</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+    <link rel="stylesheet" th:href="@{/css/grid-display.css}" />
+    <style>
+      #cl-name {
+        position: relative;
+        margin-bottom: 10px;
+      }
+      .form-header {
+        font-size: 30px;
+        font-family: "Mouse Memoirs";
+        letter-spacing: 2px;
+        color: #2eb89f;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="row justify-content-center extra-margin-b">
+      <div class="col-md-6 text-center">
+        <h2 class="heading-section">MATERI PEMBELAJARAN</h2>
+      </div>
+    </div>
+
+    <h5
+      th:if="${userDetail.role} eq 'TEACHER'"
+      class="form-header"
+      id="cl-name"
+      th:text="${selectedClass.name}"
+    ></h5>
+
+    <div class="data-not-found" th:if="${#lists.isEmpty(subjects)}">
+      <h3>DATA TIDAK DITEMUKAN</h3>
+      <br>
+      <img id="not-found-image" th:src="@{/images/empty-box.png}" alt="Empty Box Image">
+    </div>
+
+    <div class="nx2-grid-container padding-form justify-content-center" th:unless="${#lists.isEmpty(subjects)}">
+      <!-- Lengkapin thref di sini untuk edit detail -->
+      <a
+        class="nx2-grid-item center"
+        th:each="subject : ${subjects}"
+        th:value="${subject.id}"
+        th:text="${subject.name}"
+        th:href="@{'/material/' + ${classId} + '/' + ${subject.id}}"
+      ></a>
+    </div>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/global-action.js}"></script>
+
+    <script>
+      $(document).ready(function () {
+        l = $(".nx2-grid-item")[0].getBoundingClientRect().left;
+        // console.log($(".nx2-grid-item")[0].getBoundingClientRect());
+        $("#cl-name").css("left", `${l}px`);
+      });
+    </script>
+  </body>
+</html>

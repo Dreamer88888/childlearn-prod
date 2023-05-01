@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Menambahkan Akun Pengguna</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+    <style>
+      #upload-img-profile-container {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        display: flex;
+      }
+
+      #pp {
+        background-color: black;
+        border-radius: 50%;
+        height: 300px;
+        width: 300px;
+        margin-bottom: 5%;
+        cursor: pointer;
+        position: relative;
+      }
+
+      #pp:hover {
+        -webkit-filter: brightness(90%);
+      }
+
+      #tooltiptext {
+        display: none;
+        width: 100px;
+        background-color: rgb(205, 199, 199);
+        color: #fff;
+        text-align: center;
+        padding: 3px 1.5px;
+        border-radius: 3px;
+        position: absolute;
+        z-index: 2;
+      }
+
+      #upload-pp {
+        display: none;
+      }
+
+      #alert-add-user {
+        width: 25vw;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="row justify-content-center extra-margin-b">
+      <div class="col-md-6 text-center">
+        <h2 class="heading-section">MENAMBAHKAN AKUN PENGGUNA</h2>
+      </div>
+    </div>
+    <form
+      id="submission-form"
+      onsubmit="triggerModal(event, 'i')"
+      class="form-add"
+      th:object="${userDto}"
+      method="post"
+      enctype="multipart/form-data"
+      th:action="@{/user/add}"
+    >
+      <div class="row justify-content-center">
+        <div id="upload-img-profile-container">
+          <label for="upload-pp">
+            <img
+              id="pp"
+              th:src="@{/images/upload-image-icon.png}"
+              class="unselectable undraggable"
+              alt=""
+            />
+          </label>
+          <input
+            type="file"
+            class="form-control"
+            accept="image/png, image/jpeg"
+            id="upload-pp"
+            th:field="*{file}"
+          />
+          <span id="tooltiptext">Upload Image</span>
+        </div>
+        <div id="alert-add-user" class="alert alert-danger" style="margin-left: 7.8vw; margin-right: 7.8vw;" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></div>
+        <div class="mb-3 padding-form">
+          <label for="fullName" class="input-label">NAMA LENGKAP</label>
+          <input
+            type="text"
+            class="form-control"
+            id="fullName"
+            th:field="*{fullName}"
+          />
+          <div
+            class="alert alert-danger"
+            th:if="${#fields.hasErrors('fullName')}"
+            th:errors="*{fullName}"
+          ></div>
+        </div>
+        <div class="mb-3 padding-form">
+          <label for="phoneNumber" class="input-label">NOMOR TELEPON</label>
+          <input
+            type="text"
+            class="form-control disableCopyPaste"
+            id="phoneNumber"
+            placeholder="e.g. 9999-9999-9999"
+            th:field="*{phoneNumber}"
+            th:onkeypress="validateNumberOnly(event)"
+          />
+          <div
+            class="alert alert-danger"
+            th:if="${#fields.hasErrors('phoneNumber')}"
+            th:errors="*{phoneNumber}"
+          ></div>
+        </div>
+        <div class="mb-3 padding-form">
+          <label for="dob" class="input-label">TANGGAL LAHIR</label>
+          <input
+            type="date"
+            class="form-control"
+            id="dob"
+            th:field="*{dob}"
+            style="height: auto"
+          />
+          <div
+            class="alert alert-danger"
+            th:if="${#fields.hasErrors('dob')}"
+            th:errors="*{dob}"
+          ></div>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-add extra-margin-t">TAMBAH</button>
+      </div>
+    </form>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/global-action.js}"></script>
+    <script>
+      $("#pp").on("mouseenter", function (e) {
+        var x = $("#tooltiptext").css("display");
+        var t = e.clientY + "px";
+        var l = e.clientX + "px";
+        // $("#tooltiptext").css("top", t);
+        // $("#tooltiptext").css("left", l);
+        $("#tooltiptext").css("display", "block");
+      });
+
+      $("#pp").on("mousemove", function (e) {
+        if ($("#tooltiptext").css("display") === "block") {
+          var t = e.clientY + "px";
+          var l = e.clientX + "px";
+          $("#tooltiptext").css("top", t);
+          $("#tooltiptext").css("left", l);
+        }
+      });
+
+      $("#pp").on("mouseleave", function (e) {
+        $("#tooltiptext").css("display", "none");
+      });
+
+      $("#tooltiptext").tooltip({ track: true });
+    </script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Menyunting Akun Murid</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <h2 class="heading-section">MENYUNTING AKUN MURID</h2>
+      </div>
+    </div>
+    <form
+      id="submission-form"
+      onsubmit="triggerModal(event, 'u')"
+      class="form-edit"
+      th:object="${studentUpdateDto}"
+      method="post"
+      th:action="@{/student/update}"
+    >
+      <div class="row justify-content-center">
+        <div class="mb-3 padding-form">
+          <label for="fullName" class="input-label">NAMA LENGKAP</label>
+          <input
+            type="text"
+            class="form-control"
+            id="fullName"
+            th:field="*{fullName}"
+          />
+          <div
+            class="alert alert-danger"
+            th:if="${#fields.hasErrors('fullName')}"
+            th:errors="*{fullName}"
+          ></div>
+        </div>
+        <div class="mb-3 padding-form">
+          <label for="className" class="input-label">KELAS</label>
+          <select class="form-select" id="className" th:field="*{classId}">
+            <option
+              th:each="cl : ${cls}"
+              th:value="${cl.id}"
+              th:text="${cl.name}"
+            ></option>
+          </select>
+          <div
+            class="alert alert-danger"
+            th:if="${#fields.hasErrors('classId')}"
+            th:errors="*{classId}"
+          ></div>
+        </div>
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{userId}" />
+        <br />
+        <button type="submit" class="btn btn-add">SUNTING</button>
+      </div>
+    </form>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+  </body>
+</html>

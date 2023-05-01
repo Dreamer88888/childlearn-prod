@@ -1,0 +1,114 @@
+.grid-c-30-70 {
+  display: grid;
+  grid-template-columns: 48% 52%;
+  margin: 5% 10%;
+  margin-top: 0;
+}
+
+.report-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2%;
+}
+
+#vertical-card-container {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  min-height: 64vh;
+  /* border: 2px solid red; */
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.vcc-height74 {
+  height: 74vh;
+}
+
+.vcc-height66 {
+  height: 66vh;
+}
+
+#add-report-btn {
+  align-self: center;
+  font-size: 12pt;
+  /* margin-left: 2%; */
+}
+
+.expandable-card {
+  cursor: pointer;
+  font-family: "Roboto";
+  background-color: aquamarine;
+  margin-bottom: 1.2%;
+  border-radius: 15px;
+  padding: 3% 4%;
+}
+
+.expandable-card:hover {
+  opacity: 85%;
+}
+
+.card-date {
+  font-size: 14pt;
+  font-weight: 800;
+}
+
+.card-summary-desc {
+  font-size: 12pt;
+  text-align: justify;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+hr {
+  margin-left: 1.5%;
+  margin-right: 1.5%;
+}
+
+.card-detail-container {
+  font-size: 11pt;
+  display: none;
+}
+
+.card-detail-item {
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  line-height: 0.5;
+  padding-top: 5px;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+.form-header {
+  font-size: 30px;
+  font-family: "Mouse Memoirs";
+  letter-spacing: 2px;
+  color: #2eb89f;
+}
+
+.btn-group-action-report-container {
+  display: flex;
+  justify-content: end;
+}
+
+.remove-overflow {
+  display: block;
+  overflow: auto;
+}
+
+.btn-group-action-report-container a {
+  font-size: 11pt;
+  margin-left: 1.5%;
+  font-weight: bold;
+}

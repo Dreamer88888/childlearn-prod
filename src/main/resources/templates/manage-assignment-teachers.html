@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChildLearn - Mengelola Tugas & Kuis</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/manage-assignment.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal-score.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+
+    <style>
+      .grid-full {
+        display: grid;
+        width: 100%;
+        /* border: 1px solid purple; */
+        grid-template-columns: 30% 5% auto;
+      }
+
+      #card-column {
+        margin-top: 40px;
+      }
+
+      #add-btn {
+        width: 20%;
+        margin-top: 25px;
+        margin-bottom: 0;
+      }
+
+      .disabled {
+        color: #fff;
+        background-color: rgb(197, 193, 193);
+        border: #eee 0.5px solid;
+        pointer-events: none;
+      }
+
+      div.stars {
+        text-align: left;
+        width: 40%;
+      }
+
+      label.star {
+        padding: 3px;
+        font-size: 16pt;
+        float: right;
+        color: #dcee37;
+        transition: all 0.2s;
+      }
+
+      input.star {
+        display: none;
+      }
+
+      label.star:hover {
+        transform: rotate(-15deg) scale(1.3);
+      }
+
+      input.star:checked ~ label.star:before {
+        content: "\f005";
+        color: #fd4;
+        transition: all 0.25s;
+      }
+
+      input.star-5:checked ~ label.star:before {
+        color: #fe7;
+        text-shadow: 0 0 20px #952;
+      }
+
+      input.star-1:checked ~ label.star:before {
+        color: #f62;
+      }
+
+      label.star:before {
+        content: "\f006";
+        font-family: FontAwesome;
+      }
+
+      :root {
+        --star-color: #5c5a5a;
+        --star-background: #fc0;
+      }
+      .Stars {
+        --percent: calc(var(--rating) / 5 * 100%);
+        display: inline-block;
+        font-family: Times;
+        font-size: 26pt;
+      }
+      .Stars::before {
+        content: "★★★★★";
+        letter-spacing: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--star-background) var(--percent),
+          var(--star-color) var(--percent)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="asg-content-container">
+      <div class="center">
+        <h2 class="heading-section">TUGAS & KUIS</h2>
+      </div>
+      <br />
+      <div class="asg-detail">
+        <div>
+          <span class="grid-half-page">
+            <p>MATA PELAJARAN</p>
+            <p>:</p>
+            <p th:text="${subjectName}"></p>
+          </span>
+        </div>
+        <div>
+          <span class="grid-half-page">
+            <p>KELAS</p>
+            <p>:</p>
+            <p th:text="${className}"></p>
+          </span>
+        </div>
+        <a
+          class="btn btn-outline-success btn-lg btn-tambah"
+          id="add-btn"
+          th:href="@{'/assignment/add'}"
+          >Tambah Tugas & Kuis
+        </a>
+      </div>
+      
+      <div class="data-not-found" th:if="${#lists.isEmpty(assignments)}">
+        <h3>DATA TIDAK DITEMUKAN</h3>
+      <br>
+      <img id="not-found-image" th:src="@{/images/empty-box.png}" alt="Empty Box Image">
+      </div>
+
+      <div class="card" th:unless="${#lists.isEmpty(assignments)}">
+        <div class="grid-3 card-item padding-extra"  id="card-column">
+          <div class="grid-item"></div>
+          <div class="grid-item txt-column bold">JAWABAN</div>
+          <div class="grid-item txt-column bold">NILAI</div>
+        </div>
+
+        <!-- Kasih for di sini -->
+        <div class="card-item asg-card" th:each="assignment : ${assignments}">
+          <div class="asg-per-student-card">
+            <div class="asg-detail-actionBtn-container">
+              <div class="asg-name-due">
+                <div id="asg-name" class="grid-full">
+                  <p>TUGAS</p>
+                  <p>:</p>
+                  <p th:text="${assignment.title}"></p>
+                </div>
+                <div id="asg-due" class="grid-full">
+                  <p>TENGGAT WAKTU</p>
+                  <p>:</p>
+                  <p th:text="${assignment.deadline}"></p>
+                </div>
+              </div>
+              <div class="asg-actionBtn">
+                <a
+                  class="btn-primary btn-green padding-button center"
+                  th:href="@{'/assignment/get/' + ${assignment.id}}"
+                >
+                  <span class="btn-green-text large-font">UNDUH TUGAS</span>
+                </a>
+                <a
+                  th:data-href="@{'/assignment/delete/' + ${assignment.id} + '/' + ${subjectId} + '/' + ${classId}}"
+                  data-toggle="modal"
+                  data-target="#action-modal-container"
+                  onclick="modalDelete(event)"
+                  class="btn-danger btn-green padding-button center no-mr"
+                  ><span class="btn-green-text large-font">HAPUS TUGAS</span></a
+                >
+              </div>
+            </div>
+            <!-- Kasih for Lagi di sini buat student -->
+            <div
+              class="asg-student-card grid-3"
+              th:each="studentName, iter : ${assignment.studentName}"
+            >
+              <div class="grid-item txt-asg-card">
+                <div id="asg-student-name" class="grid-full">
+                  <p>NAMA</p>
+                  <p>:</p>
+                  <p th:text="${studentName}"></p>
+                </div>
+                <div id="asg-student-name" class="grid-full">
+                  <p>STATUS</p>
+                  <p>:</p>
+                  <p th:text="${assignment.status[iter.index]}"></p>
+                </div>
+              </div>
+
+              <div class="grid-item center">
+                <a
+                  class="btn-green center"
+                  th:unless="${assignment.status[iter.index]} eq 'Belum Dikerjakan'"
+                  th:href="@{'/answer-sheet/get/' + ${assignment.id} + '/' + ${assignment.studentId[iter.index]}}"
+                >
+                  <span class="btn-green-text">Unduh</span>
+                  <img
+                    th:src="@{/images/download.png}"
+                    class="btn-green-icon"
+                    alt=""
+                  />
+                </a>
+                <a
+                  class="btn-green center disabled"
+                  th:if="${assignment.status[iter.index]} eq 'Belum Dikerjakan'"
+                >
+                  <span class="btn-green-text">Unduh</span>
+                  <img
+                    th:src="@{/images/download.png}"
+                    class="btn-green-icon"
+                    alt=""
+                  />
+                </a>
+              </div>
+              <div class="grid-item center">
+                <a
+                  class="btn-green center disabled"
+                  th:if="${assignment.status[iter.index]} eq 'Belum Dikerjakan'"
+                >
+                  <span class="btn-green-text">BERI NILAI</span>
+                </a>
+                <a
+                  class="btn-green center trigger-modal"
+                  th:if="${assignment.status[iter.index]} eq 'Belum Dinilai'"
+                  th:unless="${assignment.status[iter.index]} eq 'Belum Dikerjakan'"
+                  th:data-ans-sheet-id="${assignment.answerSheetId[iter.index]}"
+                  th:data-asg-title="${assignment.title}"
+                  th:data-student-name="${assignment.studentName[iter.index]}"
+                >
+                  <span class="btn-green-text">BERI NILAI</span>
+                </a>
+                <div
+                  class="Stars"
+                  th:if="${assignment.status[iter.index]} eq 'Selesai'"
+                  th:style="'--rating: ' + ${assignment.score[iter.index]}"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- MODAL - Start -->
+    <div class="modal" id="modal-score" role="dialog">
+      <form role="form" id="form-score" th:object="${scoreDto}" method="post">
+        <div class="modal-dialog">
+          <div class="modal-content unselectable undraggable">
+            <!-- HEADER -->
+            <div class="modal-header border-0">
+              <div class="text-center">
+                <h2
+                  class="modal-title heading-section smaller-heading-than-usual"
+                >
+                  MEMBERI NILAI
+                </h2>
+              </div>
+            </div>
+            <!-- BODY -->
+            <div class="modal-body">
+              <div class="modal-tugas grid-container">
+                <p>TUGAS</p>
+                <p>:</p>
+                <p id="assignment-title"></p>
+              </div>
+              <div class="modal-kelas grid-container">
+                <p>KELAS</p>
+                <p>:</p>
+                <p id="class-name" th:text="${className}"></p>
+              </div>
+              <div class="modal-siswa grid-container">
+                <p>SISWA</p>
+                <p>:</p>
+                <p id="student-name"></p>
+              </div>
+              <div class="modal-skor grid-container">
+                <p>NILAI</p>
+                <p>:</p>
+                <div class="stars">
+                  <input
+                    class="star star-5"
+                    th:field="*{score}"
+                    th:value="5"
+                    id="star-5"
+                    type="radio"
+                    name="star"
+                  />
+                  <label class="star star-5" for="star-5"></label>
+                  <input
+                    class="star star-4"
+                    th:field="*{score}"
+                    th:value="4"
+                    id="star-4"
+                    type="radio"
+                    name="star"
+                  />
+                  <label class="star star-4" for="star-4"></label>
+                  <input
+                    class="star star-3"
+                    th:field="*{score}"
+                    th:value="3"
+                    id="star-3"
+                    type="radio"
+                    name="star"
+                  />
+                  <label class="star star-3" for="star-3"></label>
+                  <input
+                    class="star star-2"
+                    th:field="*{score}"
+                    th:value="2"
+                    id="star-2"
+                    type="radio"
+                    name="star"
+                  />
+                  <label class="star star-2" for="star-2"></label>
+                  <input
+                    class="star star-1"
+                    th:field="*{score}"
+                    th:value="1"
+                    id="star-1"
+                    type="radio"
+                    name="star"
+                  />
+                  <label class="star star-1" for="star-1"></label>
+                </div>
+              </div>
+              <div
+                class="alert alert-danger"
+                style="margin-left: 7.8vw; margin-right: 7.8vw"
+                th:if="${#fields.hasErrors('score')}"
+                th:errors="*{score}"
+              ></div>
+            </div>
+            <!-- FOOTER -->
+            <div class="modal-footer justify-content-center border-0">
+              <button type="submit" class="btn btn-add">TAMBAH</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- MODAL - End -->
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/global-action.js}"></script>
+    <script>
+      $("document").ready(function () {
+        $("#form-score").on("submit", function () {
+          var id = $("#modal-score").data("ans-sheet-id");
+          console.log(id);
+
+          $("#form-score").attr("action", `/assignment/score/${id}`);
+
+          return true;
+        });
+
+        $(".trigger-modal").on("click", function (event) {
+          event.preventDefault();
+
+          $("#modal-score").data(
+            "ans-sheet-id",
+            $($(event.currentTarget)).data("ans-sheet-id")
+          );
+          $("#modal-score").data(
+            "asg-title",
+            $($(event.currentTarget)).data("asg-title")
+          );
+          $("#modal-score").data(
+            "student-name",
+            $($(event.currentTarget)).data("student-name")
+          );
+
+          var title = $("#modal-score").data("asg-title");
+          var name = $("#modal-score").data("student-name");
+
+          $("#assignment-title").text(title);
+          $("#student-name").text(name);
+
+          $("#modal-score").modal({ backdrop: "static", keyboard: false });
+        });
+      });
+    </script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      // console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+
+      $(document).ready(function () {
+        var isScoreEmpty = /*[[${scoreIsEmpty}]]*/ "";
+        if (isScoreEmpty == "Y") {
+          $(".trigger-modal").trigger("click");
+        }
+      });
+    </script>
+  </body>
+</html>

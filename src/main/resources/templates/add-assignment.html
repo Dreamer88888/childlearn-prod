@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Mengunggah Tugas & Kuis</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/file-upload.css}" />
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+    <style>
+      footer {
+        padding-top: 0;
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <form
+      id="submission-form"
+      onsubmit="triggerModal(event, 'i')"
+      th:object="${assignmentRequestDto}"
+      method="post"
+      enctype="multipart/form-data"
+      th:action="@{/assignment/add}"
+    >
+      <div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center">
+            <h2 class="heading-section">MENAMBAHKAN TUGAS & KUIS</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="mb-3 padding-form">
+            <label for="title" class="input-label">JUDUL</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              th:field="*{title}"
+            />
+            <div
+              class="alert alert-danger"
+              th:if="${#fields.hasErrors('title')}"
+              th:errors="*{title}"
+            ></div>
+          </div>
+          <div class="mb-3 padding-form">
+            <label for="subjectName" class="input-label">MATA PELAJARAN</label>
+            <select
+              class="form-select"
+              id="subjectName"
+              th:field="*{subjectId}"
+            >
+              <option
+                th:each="subject : ${subjects}"
+                th:value="${subject.id}"
+                th:text="${subject.name}"
+              ></option>
+            </select>
+            <div
+              class="alert alert-danger"
+              th:if="${#fields.hasErrors('subjectId')}"
+              th:errors="*{subjectId}"
+            ></div>
+          </div>
+          <div class="mb-3 padding-form">
+            <label for="className" class="input-label">KELAS</label>
+            <select class="form-select" id="className" th:field="*{classId}">
+              <option
+                th:each="cl : ${cls}"
+                th:value="${cl.id}"
+                th:text="${cl.name}"
+              ></option>
+            </select>
+            <div
+              class="alert alert-danger"
+              th:if="${#fields.hasErrors('classId')}"
+              th:errors="*{classId}"
+            ></div>
+          </div>
+          <div class="mb-3 padding-form">
+            <label for="deadline" class="input-label">TENGGAT WAKTU</label>
+            <input
+              type="date"
+              style="height: auto"
+              class="form-control"
+              id="deadline"
+              th:field="*{deadline}"
+            />
+            <div
+              class="alert alert-danger"
+              th:if="${#fields.hasErrors('deadline')}"
+              th:errors="*{deadline}"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div id="bottom-green">
+        <div class="container-file-upload">
+          <div class="uploader">
+            <p class="center">UNGGAH FILE</p>
+            <label class="upload-ifc" for="file-pdf">
+              <img id="upload-cloud" src="/images/upload-cloud.png" alt="" />
+            </label>
+            <input
+              type="file"
+              class="form-control"
+              id="file-pdf"
+              accept="application/pdf"
+              th:field="*{file}"
+              onchange="uploadFilePdf()"
+            />
+            <div class="center">
+              <progress
+                id="progressBar"
+                value="0"
+                max="100"
+                style="width: 300px"
+              ></progress>
+            </div>
+          </div>
+          <div class="uploaded">
+            <p class="center">FILE YANG TERUNGGAH</p>
+            <p id="uploaded-file-details"></p>
+            <p id="loaded_n_total"></p>
+          </div>
+        </div>
+        <div
+          class="alert alert-danger"
+          style="margin-left: 7.8vw; margin-right: 7.8vw"
+          th:if="${#fields.hasErrors('file')}"
+          th:errors="*{file}"
+        ></div>
+        <br />
+        <button type="submit" class="btn btn-add-white extra-margin-b center">
+          TAMBAH
+        </button>
+      </div>
+    </form>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/progress-bar.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

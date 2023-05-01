@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Laporan Murid</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/student-report-detail.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+
+    <style>
+      :root {
+        --star-color: #5c5a5a;
+        --star-background: #fc0;
+      }
+      .Stars {
+        --percent: calc(var(--rating) / 5 * 100%);
+        display: inline-block;
+        font-family: Times;
+      }
+      .Stars::before {
+        content: "★★★★★";
+        letter-spacing: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--star-background) var(--percent),
+          var(--star-color) var(--percent)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+
+    <div class="main-container">
+      <!-- Judul -->
+      <div class="center-flex full-width">
+        <h2 class="heading-section">LAPORAN MURID</h2>
+      </div>
+      <br />
+      <!-- Nama + Deskripsi -->
+      <div class="grid-c-30-70">
+        <div class="grid-item g-i-left center">
+          <div class="student-info">
+            <img
+              th:src="@{(reportDetail.base64 != null) ? 'data:image/jpeg;base64,' + ${reportDetail.base64} : 'dummy/blank-profile-picture.png'}"
+              class="round-pp large-img undraggable unselectable"
+              alt=""
+            />
+          </div>
+          <br />
+        </div>
+        <div class="grid-item g-i-right">
+          <h5 class="form-header" th:text="${reportDetail.fullName}"></h5>
+          <h5
+            th:text="'Ditulis oleh ' + ${reportDetail.createdBy} + ' (' + ${reportDetail.createdDate} + ')'"
+          ></h5>
+          <br />
+          <p class="description" th:text="${reportDetail.summary}"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Material Dalam Bintang -->
+    <div class="center-flex">
+      <div class="card-container medium-card font-non-description">
+        <ul>
+          <li
+            class="flex-space-between"
+            th:each="subjectName, iter : ${reportDetail.subjectNames}"
+          >
+            <p th:text="${subjectName}"></p>
+            <div
+              class="Stars"
+              th:style="'--rating: ' + ${reportDetail.scores[iter.index]}"
+            ></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <br />
+
+    <!-- Slider Per Material -->
+    <br />
+    <div class="center-flex">
+      <div id="slick-report" class="card-container large-card">
+        <div th:each="subjectName, iter : ${reportDetail.subjectNames}">
+          <p
+            class="title-material-report font-non-description"
+            th:text="${subjectName}"
+          >
+            MEMBACA
+          </p>
+          <div
+            class="detail-per-material-report"
+            th:unless="${reportDetail.reportBase64[iter.index] eq ''}"
+          >
+            <a href="/dummy/baca.jpg" data-lightbox="baca">
+              <img
+                class="det-i undraggable"
+                th:src="@{'data:image/jpeg;base64,'+${reportDetail.reportBase64[iter.index]}}"
+                alt="Erik membaca di kelas"
+              />
+            </a>
+            <p
+              class="det-d description"
+              th:text="${reportDetail.notes[iter.index]}"
+            ></p>
+          </div>
+          <div
+            class="detail-per-material-report"
+            style="
+              display: flex;
+              text-align: center;
+              justify-content: center;
+              align-items: center;
+            "
+            th:if="${reportDetail.reportBase64[iter.index] eq ''}"
+          >
+            <p
+              class="description"
+              th:text="${reportDetail.notes[iter.index]}"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+
+    <script
+      type="text/javascript"
+      src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.min.js"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"
+      integrity="sha512-Ixzuzfxv1EqafeQlTCufWfaC6ful6WFqIz4G+dWvK0beHw0NVJwvCKSgafpy5gwNqKmgUfIBraVwkKI+Cz0SEQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      $("#slick-report").slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        focusOnSelect: true,
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Masuk</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <style th:inline="text">
+      body {
+        margin-top: 20px;
+        background: #f6f9fc;
+        background-color: #daf5ff;
+        margin-top: 7%;
+      }
+      .account-block {
+        padding: 0;
+        background-image: url("/images/login-background.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        position: relative;
+      }
+      .account-block .overlay {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+      .account-block .account-testimonial {
+        text-align: center;
+        color: black;
+        position: absolute;
+        margin: 0 auto;
+        padding: 0 1.75rem;
+        bottom: 3rem;
+        left: 0;
+        right: 0;
+      }
+
+      .text-theme {
+        color: #5369f8 !important;
+      }
+
+      .btn-theme {
+        background-color: #5369f8;
+        border-color: #5369f8;
+        color: #fff;
+        font-size: 1.3vw;
+        width: 100%;
+        border-radius: 10px;
+        font-family: "Roboto Condensed";
+        letter-spacing: 0.1vw;
+        font-weight: normal;
+      }
+
+      .user-detail {
+        font-size: 1.1vw;
+        font-weight: normal;
+        font-family: "Roboto Condensed";
+        letter-spacing: 0.1vw;
+      }
+
+      #welcome {
+        font-size: 3.6vw;
+        font-weight: bold;
+        letter-spacing: 0.4vw;
+        font-family: "Amatic SC";
+      }
+
+      #wejangan {
+        font-size: 2vw;
+        letter-spacing: 0.2vw;
+        font-weight: bold;
+        font-family: "Amatic SC";
+        color: #e90064;
+      }
+
+      .quotes {
+        font-size: 1.07vw;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main-wrapper" class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-10">
+          <div class="card border-0">
+            <div class="card-body p-0">
+              <div class="row no-gutters">
+                <div class="col-lg-6">
+                  <div class="p-5">
+                    <div class="mb-5">
+                      <p id="welcome">Selamat datang &#128522;</p>
+                      <p id="wejangan">&#x2764; Kita belajar yuk! &#x2764;</p>
+                    </div>
+
+                    <form
+                      th:object="${credentialDto}"
+                      method="post"
+                      th:action="@{/authenticate}"
+                    >
+                      <div class="form-group">
+                        <label class="user-detail" for="username"
+                          >Nama Pengguna</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="username"
+                          th:field="*{username}"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          th:if="${#fields.hasErrors('username')}"
+                          th:errors="*{username}"
+                        ></div>
+                      </div>
+                      <div class="form-group mb-5">
+                        <label class="user-detail" for="password"
+                          >Kata Sandi</label
+                        >
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="password"
+                          th:field="*{password}"
+                        />
+                        <div
+                          class="alert alert-danger"
+                          th:if="${#fields.hasErrors('password')}"
+                          th:errors="*{password}"
+                        ></div>
+                      </div>
+                      <button type="submit" class="btn btn-theme">Masuk</button>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="col-lg-6 d-none d-lg-inline-block">
+                  <div class="account-block rounded-right">
+                    <div class="overlay rounded-right"></div>
+                    <div class="account-testimonial">
+                      <p class="lead text-black user-detail quotes">
+                        "Akar dari pendidikan memang pahit, tapi buahnya manis."
+                      </p>
+                      <p class="user-detail quotes">- Aristoteles -</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+  </body>
+</html>

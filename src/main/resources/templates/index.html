@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Home Page</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+
+    <style>
+      .navbar {
+        margin-bottom: 0;
+      }
+      .carousel-item .carousel-caption {
+        top: 50%;
+      }
+      .carousel-item {
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="content-container">
+      <div
+        id="carouselExampleControls"
+        class="carousel slide"
+        data-ride="carousel"
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              class="d-block w-100"
+              th:src="@{${'/images/ts/ts1.jpg'}}"
+              alt="First slide"
+            />
+            <div class="carousel-caption">
+              <h1>Teacher Suggest</h1>
+            </div>
+          </div>
+          <div
+            class="carousel-item"
+            th:each="teacherSuggest : ${teacherSuggests}"
+          >
+            <a
+              id="teacher-suggest-delete"
+              th:if="${userDetail.role} eq 'TEACHER'"
+              th:data-href="@{'/teacher-suggest/delete/' + ${teacherSuggest.id} }"
+              data-toggle="modal"
+              data-target="#action-modal-container"
+              onclick="modalDelete(event)"
+              ><span>&#10006;</span></a
+            >
+            <img
+              class="d-block w-100"
+              th:src="@{'data:image/jpeg;base64,'+${teacherSuggest.base64}}"
+              alt="@{${teacherSuggest.caption}}"
+            />
+            <div class="carousel-caption">
+              <h1 th:text="${teacherSuggest.caption}"></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div id="news" class="with-margin">
+        <p id="news-tag">BERITA</p>
+        <div id="news-slider">
+          <div class="news-item" th:each="newsletter : ${newsletters}">
+            <a
+              class="news-delete"
+              th:if="${userDetail.role} eq 'TEACHER'"
+              th:data-href="@{'/newsletter/delete/' + ${newsletter.id}}"
+              data-toggle="modal"
+              data-target="#action-modal-container"
+              onclick="modalDelete(event)"
+              ><span>&#10006;</span></a
+            >
+            <div class="img-date-container">
+              <img
+                class="news-img"
+                th:src="@{'data:image/jpeg;base64,'+${newsletter.base64}}"
+                alt=""
+              />
+              <span
+                class="news-date"
+                th:text="${newsletter.activityDateString}"
+              ></span>
+            </div>
+            <h2 th:text="${newsletter.title}"></h2>
+            <div class="news-uploaded-by">
+              <img th:src="@{/images/profil.png}" alt="" />
+              <h3 th:text="${newsletter.user.fullName}"></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div id="school-about" class="with-margin">
+        <p id="about-tag">TENTANG KAMI</p>
+        <div id="about-detail">
+          <img th:src="@{/images/school.jpg}" alt="" />
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Elit
+            duis tristique sollicitudin nibh sit. Ac placerat vestibulum lectus
+            mauris ultrices. Nunc sed augue lacus viverra. Lobortis mattis
+            aliquam faucibus purus in massa tempor. Odio ut sem nulla pharetra
+            diam sit. Ultrices dui sapien eget mi proin. Volutpat blandit
+            aliquam etiam erat velit scelerisque in dictum non. Quis varius quam
+            quisque id diam vel quam elementum. A diam sollicitudin tempor id eu
+            nisl nunc mi ipsum. Risus nec feugiat in fermentum posuere. Nunc
+            eget lorem dolor sed viverra ipsum nunc.
+          </p>
+        </div>
+      </div>
+      <br />
+    </div>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+    <script
+      type="text/javascript"
+      src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.min.js"
+    ></script>
+    <script>
+      $(".carousel").carousel({
+        interval: 5000,
+      });
+
+      $(".teacher-suggest").mouseover((el) => {
+        var caption = $(el.target).data("caption");
+        console.log(caption);
+        $("#teacher-suggest-caption").html(caption);
+        $("#teacher-suggest-caption").toggleClass("show");
+      });
+
+      $(".teacher-suggest").mouseleave(() => {
+        $("#teacher-suggest-caption").html("");
+        $("#teacher-suggest-caption").toggleClass("show");
+      });
+
+      $("#news-slider").slick({
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        focusOnSelect: true,
+        dots: true,
+      });
+    </script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+@import url("//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css");
+@import url("//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css");
+
+/* body {
+  overflow-x: hidden;
+} */
+
+.grid-c-30-70 {
+  display: grid;
+  /* width: 100%; */
+  grid-template-columns: 48% 52%;
+  margin: 3% 10%;
+  margin-top: 0;
+}
+
+.g-i-left {
+  margin-right: 5%;
+}
+
+.g-i-right {
+  margin-left: 5%;
+}
+
+.agenda-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2%;
+}
+
+#vertical-card-container {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 70vh;
+  /* border: 2px solid red; */
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+#add-agenda-btn {
+  align-self: center;
+  font-size: 10pt;
+  margin-left: 2%;
+}
+
+.expandable-card {
+  font-family: "Roboto";
+  background-color: aquamarine;
+  margin-bottom: 1.2%;
+  border-radius: 15px;
+  padding: 3% 4%;
+}
+
+.card-date {
+  font-size: 16pt;
+  font-weight: 800;
+  margin-bottom: 0;
+}
+
+.del-btn {
+  font-size: 12pt;
+  font-weight: bold;
+  padding: 1% 2.5%;
+}
+
+.card-item-counter {
+  font-size: 12pt;
+  cursor: pointer;
+}
+
+hr {
+  margin-left: 1.5%;
+  margin-right: 1.5%;
+}
+
+.card-detail-container {
+  font-size: 11pt;
+  display: none;
+}
+
+.card-detail-container li::marker,
+.agenda-subject {
+  font-weight: bold;
+}
+
+.card-detail-item {
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  line-height: 0.75;
+  padding-top: 5px;
+}
+
+.card-detail-item:hover {
+  cursor: pointer;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+.flex-agd-date-del-btn {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

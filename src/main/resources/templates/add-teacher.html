@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Menambahkan Akun Guru</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+  </head>
+  <body>
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <h2 class="heading-section">MENAMBAHKAN AKUN GURU</h2>
+      </div>
+    </div>
+    <form
+      id="submission-form"
+      onsubmit="triggerModal(event, 'i')"
+      class="form-add"
+      th:object="${teacherRequestDto}"
+      method="post"
+      th:action="@{/teacher/add}"
+    >
+      <div class="row justify-content-center">
+        <div class="mb-3 padding-form">
+          <label for="fullName" class="input-label">NAMA LENGKAP</label>
+          <select class="form-select" id="fullName" th:field="*{userId}">
+            <option
+              th:each="user : ${users}"
+              th:value="${user.id}"
+              th:text="${user.fullName}"
+            ></option>
+          </select>
+          <div
+            class="alert alert-danger"
+            th:if="${#fields.hasErrors('userId')}"
+            th:errors="*{userId}"
+          ></div>
+        </div>
+        <div class="mb-3 padding-form">
+          <label for="positionName" class="input-label">POSISI</label>
+          <select
+            class="form-select"
+            id="positionName"
+            th:field="*{positionId}"
+          >
+            <option
+              th:each="position : ${positions}"
+              th:value="${position.id}"
+              th:text="${position.name}"
+            ></option>
+          </select>
+          <div
+            class="alert alert-danger"
+            th:if="${#fields.hasErrors('positionId')}"
+            th:errors="*{positionId}"
+          ></div>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-add">TAMBAH</button>
+      </div>
+    </form>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+    <script th:inline="javascript">
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

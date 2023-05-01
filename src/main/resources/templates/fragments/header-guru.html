@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Header</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+  </head>
+  <body>
+    <header>
+      <div class="navbar" th:object="${userDetail}">
+        <div class="left">
+          <ul class="navbar-left">
+            <a class="navbar-brand" th:href="@{/}"
+              ><img
+                class="undraggable"
+                th:src="@{/images/logo-childlearn.png}"
+                alt=""
+            /></a>
+            <li class="dropdown">
+              Tugas dan Kuis
+              <ul class="dropdown-menu">
+                <li th:each="cl : ${userDetail.cls}">
+                  <a
+                    th:href="@{'/assignment/' + ${cl.id}}"
+                    th:text="@{${cl.name}}"
+                  ></a>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              Materi Pembelajaran
+              <ul class="dropdown-menu">
+                <li th:each="cl : ${userDetail.cls}">
+                  <a
+                    th:href="@{'/material/' + ${cl.id}}"
+                    th:text="@{${cl.name}}"
+                  ></a>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              Agenda
+              <ul class="dropdown-menu">
+                <li th:each="cl : ${userDetail.cls}">
+                  <a
+                    th:href="@{'/agenda?classId=' + ${cl.id}}"
+                    th:text="@{${cl.name}}"
+                  ></a>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              Laporan Murid
+              <ul class="dropdown-menu">
+                <li th:each="cl : ${userDetail.cls}">
+                  <a
+                    th:href="@{'/report/' + ${cl.id}}"
+                    th:text="@{${cl.name}}"
+                  ></a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="right">
+          <ul class="navbar-right">
+            <li class="dropdown">
+              <img th:src="@{/images/kelola.png}" alt="" />
+              <ul class="dropdown-menu">
+                <li><a th:href="@{/user/add}">Menambahkan Pengguna</a></li>
+                <li><a th:href="@{/student}">Mengelola Murid</a></li>
+                <li>
+                  <a th:href="@{/teacher-suggest/add}"
+                    >Menambahkan Teacher Suggest</a
+                  >
+                </li>
+                <li><a th:href="@{/newsletter/add}">Menambahkan Berita</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <img th:src="@{/images/info.png}" alt="" />
+              <ul class="dropdown-menu">
+                <li>
+                  <a th:href="@{/school-organization}">Struktur Sekolah</a>
+                </li>
+                <li class="submenu parent-menu">
+                  <a>Teman Kelas <i class="arrow arrow-right"></i></a>
+                  <div class="child-menu">
+                    <ul>
+                      <li th:each="cl : ${userDetail.cls}">
+                        <a
+                          th:href="@{'/class-participation/' + ${cl.id}}"
+                          th:text="@{${cl.name}}"
+                        ></a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <img
+                class="img img-circle"
+                style="background: #e1dede"
+                width="25"
+                height="25"
+                th:src="@{'data:image/jpeg;base64,' + ${userDetail.base64}}"
+              />
+              <ul class="dropdown-menu center">
+                <br />
+                <img
+                  class="img img-circle"
+                  style="background: #e1dede"
+                  width="75"
+                  height="75"
+                  th:src="@{'data:image/jpeg;base64,' + ${userDetail.base64}}"
+                />
+                <br />
+                <h3 id="user-full-name" th:text="${userDetail.fullName}"></h3>
+                <li><a th:href="@{/manage-password}">Ubah Kata Sandi</a></li>
+                <li>
+                  <a
+                    data-target="#action-modal-container"
+                    data-toggle="modal"
+                    data-backdrop="static"
+                    data-keyboard="false"
+                    th:data-href="@{/logout}"
+                    onclick="modalOk(event, 'Sampai Jumpa Kembali!', true)"
+                    >Keluar</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+  </body>
+</html>

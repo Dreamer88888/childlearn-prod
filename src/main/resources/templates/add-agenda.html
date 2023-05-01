@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ChildLearn - Menambahkan Agenda</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/agenda.css}" />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/modal.css}" />
+    <link rel="stylesheet" th:href="@{/css/general-button.css}" />
+  </head>
+  <body onload="bodyOnLoad('AGD-01')">
+    <header
+      th:if="${userDetail.role} eq 'STUDENT'"
+      th:insert="~{@{fragments/header-ortu.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'TEACHER'"
+      th:insert="~{@{fragments/header-guru.html}}"
+    ></header>
+    <header
+      th:if="${userDetail.role} eq 'HEADMASTER'"
+      th:insert="~{@{fragments/header-kepsek.html}}"
+    ></header>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+          <h2 class="heading-section">MENAMBAHKAN AGENDA</h2>
+        </div>
+      </div>
+      <form
+        id="submission-form"
+        onsubmit="triggerModal(event, 'i')"
+        class="form-add"
+        th:object="${agendaRequestDto}"
+        method="post"
+        th:action="@{/agenda/add}"
+      >
+        <div class="row">
+          <div class="col-md-12">
+            <div class="content w-100">
+              <div class="calendar-container mb-5">
+                <div class="calendar">
+                  <div class="year-header">
+                    <span class="left-button fa fa-chevron-left" id="prev">
+                    </span>
+                    <span class="year" id="label"></span>
+                    <span class="right-button fa fa-chevron-right" id="next">
+                    </span>
+                  </div>
+                  <table class="months-table w-100">
+                    <tbody>
+                      <tr class="months-row">
+                        <td class="month">Jan</td>
+                        <td class="month">Feb</td>
+                        <td class="month">Mar</td>
+                        <td class="month">Apr</td>
+                        <td class="month">May</td>
+                        <td class="month">Jun</td>
+                        <td class="month">Jul</td>
+                        <td class="month">Aug</td>
+                        <td class="month">Sep</td>
+                        <td class="month">Oct</td>
+                        <td class="month">Nov</td>
+                        <td class="month">Dec</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="days-table w-100">
+                    <td class="day">Sun</td>
+                    <td class="day">Mon</td>
+                    <td class="day">Tue</td>
+                    <td class="day">Wed</td>
+                    <td class="day">Thu</td>
+                    <td class="day">Fri</td>
+                    <td class="day">Sat</td>
+                  </table>
+                  <div class="frame">
+                    <table class="dates-table w-100">
+                      <tbody class="tbody">
+                        <input type="hidden" />
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="alert alert-danger"
+          th:if="${#fields.hasErrors('date')}"
+          th:errors="*{date}"
+        ></div>
+        <div class="detail-container mb-5">
+          <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+              <h5 class="form-header">DETAIL</h5>
+            </div>
+            <div class="mb-3 padding-form">
+              <label for="subject" class="input-label">MATA PELAJARAN</label>
+              <select class="form-select" id="subject" th:field="*{subjectId}">
+                <option
+                  th:each="subject : ${subjects}"
+                  th:value="${subject.id}"
+                  th:text="${subject.name}"
+                ></option>
+              </select>
+              <div
+                class="alert alert-danger"
+                th:if="${#fields.hasErrors('subjectId')}"
+                th:errors="*{subjectId}"
+              ></div>
+            </div>
+            <div class="mb-3 padding-form">
+              <label for="class" class="input-label">KELAS</label>
+              <select class="form-select" id="class" th:field="*{classId}">
+                <option
+                  th:each="cl : ${cls}"
+                  th:value="${cl.id}"
+                  th:text="${cl.name}"
+                ></option>
+              </select>
+            </div>
+            <div class="mb-3 padding-form">
+              <label for="title" class="input-label">JUDUL</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                th:field="*{title}"
+              />
+              <div
+                class="alert alert-danger"
+                th:if="${#fields.hasErrors('title')}"
+                th:errors="*{title}"
+              ></div>
+            </div>
+            <input type="hidden" th:field="*{classId}" />
+            <input type="date" id="agendaDate" th:field="*{date}" />
+            <br />
+            <button type="submit" class="btn btn-add">TAMBAH</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <footer th:insert="~{@{fragments/footer.html}}"></footer>
+    <div class="modal" role="dialog" id="action-modal-container"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/const-modal.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" th:src="@{/js/global-action.js}"></script>
+    <script th:inline="javascript">
+      var globalEvent = /*[[${agendasDate}]]*/ "";
+      console.log(`Agendas: ${globalEvent}`);
+
+      var status = /*[[${message}]]*/ "";
+      console.log(status);
+      if (
+        status != undefined &&
+        status != null &&
+        status != "" &&
+        status != "null"
+      ) {
+        showModal(status);
+      }
+    </script>
+  </body>
+</html>

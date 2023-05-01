@@ -1,0 +1,156 @@
+.asg-content-container {
+  line-height: 1;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-self: center;
+}
+
+.asg-detail {
+  display: flex;
+  flex-direction: column;
+  padding-left: 7.5%;
+  font-size: 20pt;
+}
+
+.asg-detail span {
+  font-size: 18pt;
+  font-weight: bolder;
+  font-family: "Amatic SC";
+  letter-spacing: 1.5px;
+  color: #2eb89f;
+}
+
+.grid-half-page {
+  display: grid;
+  width: 50%;
+  /* border: 1px solid red; */
+  grid-template-columns: 30% 5% auto;
+}
+
+.bold {
+  font-weight: 900;
+}
+
+.card {
+  background: #cffff6;
+  border-radius: 12px;
+  margin: 30px 5% 0px;
+  padding-top: 0.2rem;
+  padding-bottom: 3rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 46% 27% 27%;
+  justify-content: center;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: 34% 22% 22% 22%;
+  justify-content: center;
+}
+
+.grid-item {
+  padding: 10px;
+}
+
+.txt-column {
+  font-size: 20pt;
+  font-family: "Amatic SC";
+  /* letter-spacing: 3px; */
+  font-weight: bolder;
+  color: #2eb89f;
+  text-align: center;
+}
+
+.card-item {
+  margin: 20px 5%;
+  /* border: 1px red solid; */
+}
+
+.asg-card {
+  background: #f1fffd;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 2.7pt 3.5pt #666;
+  align-items: center;
+}
+
+.txt-asg-card {
+  align-items: center;
+}
+
+#asg-name,
+#asg-due,
+#asg-status,
+#asg-student-name,
+#asg-hvnt-been-graded,
+#asg-hvnt-been-finished {
+  font-weight: bold;
+  color: #000;
+  font-family: "Amatic SC";
+  font-size: 16pt;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.flex-v-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.asg-student-card {
+  padding: 2rem;
+  border-radius: 15px;
+  background-color: #f5faf9;
+  box-shadow: 1.3pt 1.5pt #666;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.padding-extra {
+  padding: 0 3rem;
+}
+
+.asg-detail-actionBtn-container {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  display: grid;
+  grid-template-columns: 60% 40%;
+  align-items: center;
+}
+
+.asg-name-due {
+  /* display: flex; */
+  /* align-items: center; */
+  width: 100%;
+}
+
+#asg-name,
+#asg-due {
+  /* border: 2px solid brown; */
+  align-self: center;
+}
+
+.asg-actionBtn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.no-mr {
+  margin-right: 0;
+}
+
+.large-font {
+  font-size: 14pt;
+}
+
+.padding-button {
+  padding: 1em 3em;
+}

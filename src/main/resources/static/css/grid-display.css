@@ -1,0 +1,73 @@
+.nx2-grid-container a {
+  color: #5a5757;
+  text-decoration: none;
+}
+
+.nx2-grid-container a:hover {
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition-duration: 2s;
+  font-size: 28pt;
+  color: #ebe2e2e2;
+  text-decoration: none;
+}
+
+.nx2-grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  text-align: center;
+}
+
+.nx2-grid-item {
+  font-family: "Amatic SC";
+  font-weight: bold;
+  font-size: 24pt;
+  background-color: #ffe27b;
+  border-radius: 5px;
+  width: 14em;
+  margin: 0 0.3em 0.5em;
+  height: 6em;
+  padding: 6.75rem 3rem;
+  justify-self: center;
+}
+
+.nx2-grid-item:hover {
+  background-color: #f3ac43;
+  cursor: pointer;
+}
+
+.nx4-grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: center;
+  text-align: center;
+}
+
+.person-grid-item {
+  font-family: "Amatic SC";
+  font-weight: bold;
+  font-size: 16pt;
+  color: #2eb89f;
+  margin-bottom: 12%;
+}
+
+.round-person-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: #e1dede;
+}
+
+.font-color-black {
+  color: #000;
+}
+
+.jc-space-evenly {
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.dynamic-grid-container {
+  display: grid;
+  grid-auto-flow: column;
+  text-align: center;
+}

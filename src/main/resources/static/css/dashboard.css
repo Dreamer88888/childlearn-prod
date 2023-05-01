@@ -1,0 +1,218 @@
+@import url("//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css");
+@import url("//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css");
+
+/* @keyframes caption-animation-shown {
+  from {
+    color: black;
+    opacity: 0;
+  }
+  to {
+    color: white;
+    opacity: 100%;
+  }
+} */
+
+#slider-view {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#ts-caption {
+  justify-content: center;
+  text-align: center;
+}
+
+#image-roll,
+#ts-caption {
+  display: flex;
+  position: relative;
+}
+
+#image-roll img {
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: contain;
+  height: auto;
+  width: auto;
+}
+
+/* #image-roll img:hover {
+  -webkit-filter: brightness(50%);
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  transition: all 0.5s ease;
+} */
+
+#teacher-suggest-caption {
+  z-index: 100;
+  margin-top: 50vh;
+  margin-bottom: 50vh;
+  position: absolute;
+  color: #fff;
+  font-size: 54pt;
+  display: none;
+  pointer-events: none;
+}
+
+/* .show {
+  -webkit-animation: caption-animation-shown 2.5s ease-in-out;
+} */
+
+.with-margin {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+#news-tag {
+  font-family: "Amatic SC";
+  font-weight: bolder;
+  color: #ffd8f4;
+  font-size: 36pt;
+  margin-bottom: 3%;
+}
+
+.news-item {
+  padding-top: 5px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  position: relative;
+}
+
+.news-img {
+  width: 32rem;
+  height: 24rem;
+  border-radius: 1.5rem;
+  margin-bottom: 3%;
+}
+
+.news-item h2,
+.news-item div {
+  width: 32rem;
+}
+
+.news-uploaded-by {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5%;
+}
+
+.news-uploaded-by img {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  margin-right: 5%;
+}
+
+#school-about {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#about-tag {
+  font-size: 36pt;
+  font-weight: bold;
+  font-family: "Mouse Memoirs";
+  letter-spacing: 2px;
+  margin-bottom: 3%;
+}
+
+#about-detail img {
+  width: 40rem;
+  height: 30rem;
+  margin-right: 5%;
+}
+
+#about-detail {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10%;
+  font-family: "Roboto Condensed";
+  font-size: 14pt;
+  text-align: justify;
+}
+
+.news-delete {
+  z-index: 2;
+  font-family: "Roboto Condensed";
+  position: absolute;
+  text-decoration: none;
+  text-align: center;
+  justify-content: center;
+  border-radius: 50%;
+  right: 5px;
+  border: 0px;
+  font-size: 12pt;
+  width: 7.2%;
+  height: 7.2%;
+  background-color: rgb(223, 11, 11);
+  /* transition-duration: 0.3s; */
+  color: #fae7e7;
+}
+
+.news-delete:hover {
+  text-decoration: none;
+  background-color: rgb(247, 17, 17);
+  color: #fff;
+}
+
+#teacher-suggest-delete {
+  display: flex;
+  justify-content: center;
+  font-family: "Roboto Condensed";
+  text-decoration: none;
+  border-radius: 50%;
+  font-size: 12pt;
+  background-color: rgb(223, 11, 11);
+  /* transition-duration: 0.3s; */
+  color: #fae7e7;
+  z-index: 2;
+  position: absolute;
+  width: 1.5em;
+  height: 1.5em;
+  top: 3%;
+  right: 1.5%;
+}
+
+#teacher-suggest-delete:hover {
+  cursor: pointer;
+  text-decoration: none;
+  background-color: rgb(247, 17, 17);
+  color: #fff;
+}
+
+.img-date-container {
+  position: relative;
+}
+
+.news-date {
+  background-color: #f5f5f5;
+  color: #000;
+  font-size: 10pt;
+  font-weight: bolder;
+  opacity: 60%;
+  padding: 3% 10%;
+  border-radius: 1.2rem;
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
+
+.news-delete:focus,
+.teacher-suggest-delete:focus {
+  color: #fff;
+  text-decoration: none;
+  outline: none;
+}
